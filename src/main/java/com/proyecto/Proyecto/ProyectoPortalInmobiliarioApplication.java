@@ -8,6 +8,7 @@ public class ProyectoPortalInmobiliarioApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoPortalInmobiliarioApplication.class, args);
+                System.out.println("Esta es una linea de codigo de prueba para usar GitHub");
 	}
 
 }
