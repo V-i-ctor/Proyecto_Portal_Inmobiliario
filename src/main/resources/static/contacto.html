@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        
+        <h2>Formulario de Contacto</h2>
+        
+        <form th:action="@{/contacto/enviar}" th:object="${contacto}"
+              method="POST" class="was-validated" enctype="multipart/form-data">
+                        <div>
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" maxlength="30" required>
+            </div>
+            <div>
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" maxlength="30" required>
+            </div>
+            <div>
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" name="correo" maxlength="45" required>
+            </div>
+            <div>
+                <label for="telefono">Teléfono:</label>
+                <input type="tel" id="telefono" name="telefono" maxlength="15" required>
+            </div>
+            <div>
+                <label for="mensaje">Mensaje de Contacto:</label><br>
+                <textarea id="mensaje" name="mensaje" rows="4" maxlength="1024" required></textarea>
+            </div>
+            <div>
+                <button type="submit">Enviar</button>
+            </div>
+       
+        </form>
+    </body>
+</html>

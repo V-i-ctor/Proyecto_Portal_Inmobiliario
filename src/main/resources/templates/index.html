@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <style>
+            .texto-pequeno {
+                font-size: 8px;
+                color: #000000;
+            }
+            .btn-busca {
+                background-color: #8AC3E4;
+                border: 10px solid #D2D2D2; 
+            }
+            .card-border {
+             border: 4px solid #D2D2D2; 
+            }
+            
+        </style>
+        <link href="/webjars/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body style="background-color: #8AC3E4; ">
+        <header th:replace="~{layout/plantilla :: header}"></header>
+
+        <div class="container" style="padding-top: 180px;">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <h4 class="text-center">¡Bienvenido A Nuestro Portal Inmobiliario De Primer Nivel!</h4>
+                    <h6 class="text-center"><br><small>En Real State, Nos Dedicamos A Ofrecer Las Mejores Propiedades Residenciales Y 
+                                Comerciales, Brindando Soluciones Personalizadas Para Cada Cliente En Busca Del Hogar O Espacio Ideal.</small></h6>
+                </div>
+            </div>
+        </div>
+
+        <section th:fragment="buscando" class="py-4 mb-4" style="background-color: #8AC3E4;">
+            <div class="container">
+                <div class="row justify-content-center mb-3">
+                    <div class="col-md-auto text-center">
+                        <div class="card card-border  text-center text-black mb-1">
+                            <div class="card-body">
+                                <p class="texto-pequeno">Buscar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-auto text-center">
+                        <div class="card card-border text-black mb-3">
+                            <div class="card-body">
+                                <p class="texto-pequeno">EN BUSCA DE</p>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-busca">[[#{index.propiedad}]]</button>
+                                    <button type="button" class="btn btn-busca dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#">En Renta</a></li>
+                                        <li><a class="dropdown-item" href="#">En Venta</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-auto text-center">
+                        <div class="card card-border text-center text-black mb-3">
+                            <div class="card-body">
+                                <p class="texto-pequeno">UBICACIÓN</p>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-busca">[[#{index.ubicacion}]]</button>
+                                    <button type="button" class="btn btn-busca dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Heredia</a></li>
+                                        <li><a class="dropdown-item" href="#">San José</a></li>
+                                        <li><a class="dropdown-item" href="#">Alajuela</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-auto text-center">
+                        <div class="card card-border text-center text-black mb-3">
+                            <div class="card-body">
+                                <p class="texto-pequeno">TAMAÑO DE PROPIEDAD</p>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-busca">[[#{index.habitacion}]]</button>
+                                    <button type="button" class="btn btn-busca dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">1-2</a></li>
+                                        <li><a class="dropdown-item" href="#">3-4</a></li>
+                                        <li><a class="dropdown-item" href="#">+4</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-auto text-center">
+                        <div class="card card-border text-center text-black mb-3">
+                            <div class="card-body">
+                                <p class="texto-pequeno">Presupuesto</p>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-busca">[[#{index.precio}]]</button>
+                                    <button type="button" class="btn btn-busca dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">250 000-400 000</a></li>
+                                        <li><a class="dropdown-item" href="#">400 000-600 000</a></li>
+                                        <li><a class="dropdown-item" href="#">+600 000</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        <script src="/webjars/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
