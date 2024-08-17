@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{layout/plantilla :: head}">
-        <title>Preguntas Frecuentes</title>
+        <title>Agentes</title>
     </head>
     <body>
         <header th:replace="~{layout/plantilla :: header}"/>
 
-        <section th:replace="~{pregunta/fragmento :: botonesAgregar}"/>
-        <section th:replace="~{pregunta/fragmento :: agregarPregunta}"/> 
-        <section th:replace="~{pregunta/fragmento :: vistaPreguntas}"/>
+        <section th:replace="~{agente/fragmento :: botonesAgregar}"/>
+        <section th:replace="~{agente/fragmento :: agregarAgente}"/> 
+        <section th:replace="~{agente/fragmento :: listadoAgentes}"/>
 
 
         <footer th:replace="~{layout/plantilla :: footer}"/>      

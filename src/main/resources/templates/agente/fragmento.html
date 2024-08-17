@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Agentes</title>
+        <style>
+            .agente-container {
+                border: 2px solid pink;
+                padding: 15px;
+                margin-bottom: 20px;
+                display: flex;
+                flex-wrap: nowrap; /* No permite que los elementos se envuelvan */
+                align-items: center;
+            }
+
+            .agente-foto {
+                flex: 0 0 auto; /* Mantiene el tamaño de la imagen fijo */
+                margin-right: 20px; /* Añade espacio entre la imagen y la info */
+            }
+
+            .agente-info {
+                flex: 1; /* Toma el espacio restante */
+                margin-right: 20px; /* Añade espacio entre la info y la descripción */
+            }
+
+            .agente-descripcion {
+                flex: 1; /* Toma el espacio restante */
+            }
+
+            .agente-foto img {
+                max-width: 150px; /* Fija el ancho de la imagen */
+                height: auto;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">   
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarAgente">
+                            <i class="fas fa-plus"></i> [[#{agente.agregar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 Fragmento para agregar agente, es la ventana modal -->
+        <section th:fragment="agregarAgente">
+            <div id="agregarAgente" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{agente.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/agente/guardar}" th:object="${agente}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nombre">[[#{agente.nombre}]]</label>
+                                    <input type="text" class="form-control" name="nombre" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="apellido">[[#{agente.apellido}]]</label>
+                                    <input type="text" class="form-control" name="apellido" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="correo">[[#{agente.correo}]]</label>
+                                    <input type="text" class="form-control" name="correo" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="telefono">[[#{agente.telefono}]]</label>
+                                    <input type="text" class="form-control" name="telefono" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="descripcion">[[#{agente.descripcion}]]</label>
+                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sitioWeb">[[#{agente.sitioWeb}]]</label>
+                                    <input type="text" class="form-control" name="sitioWeb" required="true"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="activo">[[#{agente.activo}]]</label>
+                                    <input class="form-check-input" type="checkbox" name="activo" id="activo"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="imagen">[[#{agente.rutaImagen}]]</label>
+                                    <input class="form-control" type="file" name="imagenFile" onchange="readURL(this);"/>
+                                    <img id="blah" src="#" alt="your image" height="200"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Sección principal para mostrar la información de la entidad agente -->
+        <section th:fragment="listadoAgentes" id="agentes">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div th:if="${agentes != null and !agentes.empty}">
+                            <div th:each="agente : ${agentes}" class="agente-container">
+                                <!-- Foto del agente -->
+                                <div class="agente-foto">
+                                    <img th:src="@{${agente.rutaImagen}}" alt="Foto de [[${agente.nombre}]]">
+                                </div>
+
+                                <div class="agente-info">
+                                    <p><strong>Nombre:</strong> [[${agente.nombre}]] [[${agente.apellido}]]</p>
+                                    <p><strong>Correo:</strong> [[${agente.correo}]]</p>
+                                    <p><strong>Teléfono:</strong> [[${agente.telefono}]]</p>
+                                    <p><strong>Sitio Web:</strong> <a th:href="@{${agente.sitioWeb}}" target="_blank">[[${agente.sitioWeb}]]</a></p>
+                                </div>
+                                <div class="agente-descripcion">
+                                    <p><strong>Acerca de [[${agente.nombre}]]:</strong></p>
+                                    <p>[[${agente.descripcion}]]</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center p-2" th:if="${agentes == null or agentes.empty}">
+                            <span>[[#{lista.vacia}]]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- 4 Fragmento que se utiliza en la página modifca.html -->
+        <section th:fragment="editarAgente">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST"
+                          th:action="@{/agente/guardar}" 
+                          th:object="${agente}"
+                          class="was-validated"                          
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="idAgente" th:field="*{idAgente}"/>
+                        <section th:replace="~{agente/fragmento :: botonesEditar}"/>
+                        <div id=details>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>[[#{accion.actualizar}]]</h4>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="mb-3">
+                                                    <label for="nombre">[[#{agente.nombre}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="nombre" th:field="*{nombre}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="apellido">[[#{agente.apellido}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="apellido" th:field="*{apellido}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="correo">[[#{agente.correo}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="correo" th:field="*{correo}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="telefono">[[#{agente.telefono}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="telefono" th:field="*{telefono}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="descripcion">[[#{agente.descripcion}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="descripcion" th:field="*{descripcion}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="sitioWeb">[[#{agente.sitioWeb}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="sitioWeb" th:field="*{sitioWeb}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="activo">[[#{agente.activo}]]</label>
+                                                    <input class="form-check-input" 
+                                                           type="checkbox" 
+                                                           name="activo" 
+                                                           id="activo"
+                                                           th:field="*{activo}">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="imagen">[[#{agente.rutaImagen}]]</label>
+                                                    <input class="form-control" type="file" name="imagenFile"
+                                                           onchange="readURL(this);" />
+                                                    <img id="blah" th:src="@{${agente.rutaImagen}}" alt="your image" height="200"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
+        <section th:fragment="botonesEditar">
+            <div class="container py-4 mb-4 bg-light">
+                <div class="row">
+                    <div class="col-md-4 d-grid">
+                        <a th:href="@{/agente/listado}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">                                
+                        <a th:href="@{/agente/eliminar/}+${agente.idAgente}"
+                           class="btn btn-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

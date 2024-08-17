@@ -1,28 +1,179 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+      xmlns:th="http://www.thymeleaf.org">
     <head th:replace="~{layout/plantilla :: head}">
         <title>Preguntas Frecuentes</title>
     </head>
     <body>
-        <section th:fragment="tabla">
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Preguntas Frecuentes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>¿Cuáles son los requisitos para obtener una hipoteca en Nueva York?</td>
-                        <td>¿Cuáles son los requisitos para obtener una hipoteca en Nueva York?</td>
-                        <td>¿Cuáles son los costos asociados con la compra de una vivienda en Nueva York?</td>
-                        <td>¿Cuáles son los pasos involucrados en el proceso de compra de una propiedad en Nueva York?</td>
-                        <td>¿Qué debo considerar al invertir en propiedades comerciales en Nueva York?</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- 1 Sección para crear el boton de agregar... llamará a una ventana modal-->
+        <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">   
+                        <button 
+                            type="button" 
+                            class="btn btn-primary btn-block" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#agregarPregunta">
+                            <i class="fas fa-plus"></i> [[#{pregunta.agregar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2 Fragmento para agregar pregunta, es la ventana modal -->
+        <section th:fragment="agregarPregunta">
+            <div id="agregarPregunta" 
+                 class="modal fade" 
+                 tabindex="-1" 
+                 aria-labelledby="exampleModalLabel" 
+                 aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{pregunta.agregar}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div> 
+                        <form th:action="@{/pregunta/guardar}" th:object="${pregunta}"
+                              method="POST" class="was-validated" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="pregunta">[[#{pregunta.pregunta}]]</label>
+                                    <input type="text" class="form-control" name="pregunta" required="true"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="respuesta">[[#{pregunta.respuesta}]]</label>                                    
+                                    <textarea class="form-control" name="respuesta" required="true" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="activo">[[#{pregunta.activo}]]</label>
+                                    <input class="form-check-input" 
+                                           type="checkbox" 
+                                           name="activo" 
+                                           id="activo"/>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3 Sección principal para mostrar la informaccion de la entidad pregunta -->
+        <section th:fragment="vistaPreguntas" id="preguntas">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{pregunta.vista}]]</h4>
+                            </div>
+                            <div th:if="${preguntas != null and !preguntas.empty}">
+                                <table class="table table-striped table-hover">
+                                    <tbody>
+                                        <tr th:each="pregunta, contador : ${preguntas}">
+                                            <td class="text-center">[[${contador.count}]]</td>
+                                            <td class="fs-6">[[${pregunta.pregunta}]]</td>
+                                            <td>[[${pregunta.respuesta}]]</td>
+                                            <td><a th:href="@{/pregunta/eliminar/}+${pregunta.idPregunta}"
+                                                   class="btn btn-danger">
+                                                    <i class="fas fa-trash"></i> [[#{accion.eliminar}]]</a></td>
+                                            <td>
+                                                <a th:href="@{/pregunta/modificar/}+${pregunta.idPregunta}"
+                                                   class="btn btn-success">
+                                                    <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="text-center p-2" th:if="${preguntas == null or preguntas.empty}">
+                                <span>[[#{lista.vacia}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4 Fragmento que se utiliza en la página modifca.html -->
+        <section th:fragment="editarPregunta">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form method="POST"
+                          th:action="@{/pregunta/guardar}" 
+                          th:object="${pregunta}"
+                          class="was-validated"                          
+                          enctype="multipart/form-data">
+                        <input type="hidden" name="idPregunta" th:field="*{idPregunta}"/>
+                        <section th:replace="~{pregunta/fragmento :: botonesEditar}"/>
+                        <div id=details>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h4>[[#{accion.actualizar}]]</h4>
+                                            </div>
+                                            <div class="card-body">
+
+                                                <div class="mb-3">
+                                                    <label for="pregunta">[[#{pregunta.pregunta}]]</label>
+                                                    <input type="text" class="form-control" 
+                                                           name="pregunta" th:field="*{pregunta}"
+                                                           required="true">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="respuesta">[[#{pregunta.respuesta}]]</label>                                    
+                                                    <textarea class="form-control" 
+                                                              th:field="*{respuesta}" rows="3"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="activo">[[#{pregunta.activo}]]</label>
+                                                    <input class="form-check-input" 
+                                                           type="checkbox" 
+                                                           name="activo" 
+                                                           id="activo">
+                                                </div>    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5 Fragmento que se utiliza en el fragmento anterior -->
+        <section th:fragment="botonesEditar">
+            <div class="container py-4 mb-4 bg-light">
+                <div class="row">
+                    <div class="col-md-4 d-grid">
+                        <a th:href="@{/pregunta/vista}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">                                
+                        <a th:href="@{/pregunta/eliminar/}+${pregunta.idPregunta}"
+                           class="btn btn-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
     </body>
 </html>

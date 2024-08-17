@@ -17,18 +17,20 @@ public class Contacto implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_contacto")
 
-    private Long id;
+    private Long idContacto;
     private String nombre;
     private String apellido;
     private String correo;
     private String telefono;
     private String mensajeContacto;
+    private boolean activo;
 
     public Contacto() {
     }
 
-    public Contacto(String nombre, String apellido,String correo, 
-            String telefono,String mensajeContacto) {
-
+    public Contacto(String contacto, boolean activo) 
+    {         
+        this.nombre = contacto;         
+        this.activo = activo;     
     }
 }

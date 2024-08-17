@@ -21,10 +21,22 @@ public class ContactoController {
 
     @Autowired
     private ContactoService contactoService;
-
-    @PostMapping("/enviar")
-    public String contactoEnviar(Contacto contacto) {
+    
+    @GetMapping("/vista")     
+    public String inicio(Model model) {         
+        var contactos = contactoService.getContactos(false);
+        model.addAttribute("contactos", contactos);         
+        return "/contacto/vista";     
+    }
+    
+    @GetMapping("/nuevo")
+    public String contactoNuevo(Contacto contacto){
+        return "/contacto/modifica";
+    }
+    
+    @PostMapping("/guardar")
+    public String contactoGuardar(Contacto contacto, @RequestParam("imagenFile")MultipartFile imagenFile){
         contactoService.save(contacto);
-        return "redirect:/index";
+        return "redirect:/contacto/vista";
     }
 }
